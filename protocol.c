@@ -4,6 +4,20 @@
 
 #include "protocol.h"
 
+/**
+ * Pack an IDTech payload into the appropriate protocol frame for sending over
+ * either USB or serial.
+ *
+ * Args:
+ * src - Pointer to source buffer with payload data
+ * dest - Pointer to a pointer to receive packed data. Memory will be allocated for this, and
+ * must be free'd later.
+ * length - Length of payload.
+ *
+ * Return:
+ * Length of packed payload.
+ *
+ */
 uint16_t pack_payload(uint8_t *src, uint8_t **dest, unsigned int length)
 {
 
@@ -43,3 +57,13 @@ uint16_t pack_payload(uint8_t *src, uint8_t **dest, unsigned int length)
     return total_length;
 }
 
+uint8_t *unpack_payload(uint8_t *src, unsigned int length)
+{
+
+    uint16_t payload_length = length - 6;
+
+    // Allocate for payload size
+    
+
+
+}
