@@ -25,4 +25,5 @@
 #define WORD(l, m)    l + (m << 8)
 
 uint16_t pack_payload(uint8_t *, uint8_t **, unsigned int);
+uint16_t unpack_payload(uint8_t *, uint8_t **);
 

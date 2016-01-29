@@ -46,24 +46,27 @@ uint16_t pack_payload(uint8_t *src, uint8_t **dest, unsigned int length)
     *dest = (uint8_t *) malloc(total_length);
 
     **dest = STX;
-    *(*dest + 1) = GET_LSB(length);
-    *(*dest + 2) = GET_MSB(length);
-    memcpy((*dest + 3), src, length);
+    *(*dest + LEN_LSB_IDX) = LSB(length);
+    *(*dest + LEN_MSB_IDX) = MSB(length);
+    memcpy((*dest + PAYLOAD_IDX), src, length);
 
-    *(*dest + (3 + length))  = lrc;
-    *(*dest + (4 + length)) = checksum;
-    *(*dest + (5 + length)) = ETX; 
+    *(*dest + LRC_IDX(length))  = lrc;
+    *(*dest + CHKSUM_IDX(length)) = checksum;
+    *(*dest + ETX_IDX(length)) = ETX; 
 
     return total_length;
 }
 
-uint8_t *unpack_payload(uint8_t *src, unsigned int length)
+uint16_t unpack_payload(uint8_t *src, uint8_t **payload)
 {
 
-    uint16_t payload_length = length - 6;
+    uint16_t payload_length = WORD(src[LEN_LSB_IDX], src[LEN_MSB_IDX]);
 
     // Allocate for payload size
-    
+    uint8_t *payload = malloc(payload_length);
 
+    // Copy
+    mempcy(*payload, src + PAYLOAD_IDX, payload_length);
 
+    return payload_length;
 }
