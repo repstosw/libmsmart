@@ -1,5 +1,4 @@
-#ifndef PROTOCOL_H
-#define PROTOCOL_H
+#pragma once
 
 #include <stdint.h>
 
@@ -14,8 +13,4 @@
 #define WORD(l, m)    l + (m << 8)
 
 uint16_t pack_payload(uint8_t *, uint8_t **, unsigned int);
-
-#endif
-
-
 
