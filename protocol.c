@@ -57,16 +57,28 @@ uint16_t pack_payload(uint8_t *src, uint8_t **dest, unsigned int length)
     return total_length;
 }
 
+/**
+ * Extract a payload from a protocol frame.
+ *
+ * Args:
+ * src - Source protocol frame
+ * payload - Destination location to extract payload to. Memory for this
+ * will be allocated and must be free'd later.
+ * 
+ * Returns:
+ * Length of unpacked payload.
+ *
+ */
 uint16_t unpack_payload(uint8_t *src, uint8_t **payload)
 {
 
     uint16_t payload_length = WORD(src[LEN_LSB_IDX], src[LEN_MSB_IDX]);
 
     // Allocate for payload size
-    uint8_t *payload = malloc(payload_length);
+    *payload = malloc(payload_length);
 
     // Copy
-    mempcy(*payload, src + PAYLOAD_IDX, payload_length);
+    memcpy(*payload, src + PAYLOAD_IDX, payload_length);
 
     return payload_length;
 }

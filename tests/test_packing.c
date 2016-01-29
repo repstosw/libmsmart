@@ -3,7 +3,7 @@
 #include "cutest.h"
 #include "protocol.h"
 
-void test_pack_payload(void)
+void test_pack_payload()
 {
     uint8_t payload[] = { 0x78, 0x46, 0x02 };
     uint8_t *result = NULL;
@@ -47,8 +47,53 @@ void test_pack_payload2()
     free(result);
 }
 
+void test_unpack()
+{
+    uint8_t packed_payload[] = {
+        0x02, 0x03, 0x00, 0x78, 0x46, 0x01, 0x3F, 0xBF, 0x03
+    };
+
+    uint8_t *payload;
+    uint16_t payload_length;
+
+    payload_length = unpack_payload(packed_payload, &payload);
+
+    TEST_CHECK(payload != NULL);
+    TEST_CHECK(payload_length == 3);
+    TEST_CHECK(payload[0] == 0x78);
+    TEST_CHECK(payload[1] == 0x46);
+    TEST_CHECK(payload[2] == 0x01);
+
+    free(payload);
+}
+
+void test_bijection()
+{
+    uint8_t unpacked[] = {
+        0x06, 0x35, 0x33, 0x39, 0x54, 0x30, 0x39, 0x34, 0x35, 0x38, 0x32
+    };
+
+    unsigned int unpacked_length = 11;
+    uint8_t *packed;
+
+    uint16_t packed_length = pack_payload(unpacked, &packed, unpacked_length); 
+
+    uint8_t *unpacked_result;
+    uint16_t unpacked_result_length = unpack_payload(packed, &unpacked_result);
+
+    TEST_CHECK(unpacked_result_length == unpacked_length);
+    int cmp = memcmp(unpacked, unpacked_result, unpacked_result_length);
+    TEST_CHECK(cmp == 0);
+
+    free(packed);
+    free(unpacked_result);
+}
+
+
 TEST_LIST = {
     { "pack_payload", test_pack_payload },
     { "pack_payload2", test_pack_payload2 },
+    { "unpack", test_unpack },
+    { "bijection", test_bijection },
     { 0 }
 };

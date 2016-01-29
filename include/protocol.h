@@ -14,7 +14,7 @@
 // Indices based upon the payload length
 #define LRC_IDX(x)      x + 3
 #define CHKSUM_IDX(x)   x + 4
-#define ETX_IDX         x + 5
+#define ETX_IDX(x)      x + 5
 
 
 // Get LSB and MSB from a 16-bit word
