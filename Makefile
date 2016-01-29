@@ -11,21 +11,23 @@ LDFLAGS=-lhidapi
 
 
 %.o: %.c $(DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS)
+	@$(CC) -c -o $@ $< $(CFLAGS)
 
 tests/%.o: tests/%.c tests/cutest.h
-	$(CC) -c -o $@ $< $(CFLAGS)
+	@$(CC) -c -o $@ $< $(CFLAGS)
 
-all: $(MODULES) doit.o
-	$(CC) -o doit $^ $(LDFLAGS) $(CFLAGS)
+all: clean tests mstest
 
 tests: $(TESTMODULES) $(MODULES)
-	$(CC) -o tests/runtests $^ $(CFLAGS)
+	@$(CC) -o tests/runtests $^ $(CFLAGS)
 	tests/runtests
 
+mstest: mstest.o $(MODULES)
+	@$(CC) -o mstest $^ $(LDFLAGS) $(CFLAGS)
+
 clean:
-	rm -f *.o
-	rm -f tests/*.o
+	@rm -f *.o
+	@rm -f tests/*.o
 
 
 
